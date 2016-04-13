@@ -12,6 +12,7 @@ module Fpm
     attribute :ruby_version, kind_of: String, default: '2.1.2', regex: ['2.1.2']
     attribute :input_type, kind_of: String, default: 'dir', regex: 'dir'
     attribute :output_type, kind_of: String, default: 'rpm', regex: ['rpm', 'deb']
+    attribute :output_dir, kind_of: String, default: Chef::Config[:file_cache_path], required: true
     attribute :package_version, kind_of: String, default: '1.0'
   end
   class Provider < Chef::Provider
@@ -44,9 +45,9 @@ module Fpm
         cwd Chef::Config[:file_cache_path]
         code <<-EOH
         #{self.bin} -s #{input_type} -t #{output_type} -n #{name} #{sources}
-        mv #{output_name} #{name}.#{output_type}
+        mv #{output_name} #{new_resource.output_dir}/#{name}.#{output_type}
         EOH
-        not_if do ::File.exists?("#{name}.#{output_type}") end
+        not_if do ::File.exists?("#{new_resource.output_dir}/#{name}.#{output_type}") end
       end
     end
     def given_the_givens
