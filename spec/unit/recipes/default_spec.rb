@@ -12,7 +12,6 @@ describe 'fpm-cookbook::default' do
       runner = ChefSpec::ServerRunner.new
       runner.converge(described_recipe)
     end
-
     it 'converges successfully' do
       expect { chef_run }.to_not raise_error
     end
