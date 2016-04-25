@@ -1,4 +1,4 @@
-name 'fpm'
+name 'poise-fpm'
 maintainer 'Luis De Siqueira'
 maintainer_email 'LouTheBrew@gmail.com'
 license 'MIT'

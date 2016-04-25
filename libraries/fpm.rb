@@ -36,6 +36,8 @@ module Fpm
     end
     def deps
       package 'rpm-build'
+      package 'xz'
+      package 'xz-devel'
     end
     def bin
       "/opt/rbenv/versions/#{new_resource.ruby_version}/bin/fpm"
