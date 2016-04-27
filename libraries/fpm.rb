@@ -7,12 +7,13 @@ module Fpm
     include Poise
     provides  :fpm
     actions   :package
+    attribute :install_deps, default: true, kind_of: [TrueClass, FalseClass]
     attribute :name, name_attribute: true, kind_of: String
     attribute :sources, required: true, kind_of: String
     attribute :ruby_version, kind_of: String, default: '2.1.2', regex: ['2.1.2']
     attribute :input_type, kind_of: String, default: 'dir', regex: 'dir'
     attribute :output_type, kind_of: String, default: 'rpm', regex: ['rpm', 'deb']
-    attribute :output_dir, kind_of: String, default: Chef::Config[:file_cache_path], required: true
+    attribute :output_dir, kind_of: String, default: "#{Chef::Config[:file_cache_path]}", required: true
     attribute :package_version, kind_of: String, default: '1.0'
   end
   class Provider < Chef::Provider
@@ -43,6 +44,9 @@ module Fpm
       "/opt/rbenv/versions/#{new_resource.ruby_version}/bin/fpm"
     end
     def pkg(input_type, output_type, output_name, name, sources)
+      directory new_resource.output_dir do
+        recursive true
+      end
       bash "package #{name}" do
         cwd Chef::Config[:file_cache_path]
         code <<-EOH
@@ -54,7 +58,9 @@ module Fpm
     end
     def given_the_givens
       virtual_ruby new_resource.ruby_version, ['fpm']
-      deps
+      if new_resource.install_deps
+        deps
+      end
       yield
     end
     def action_package

@@ -4,4 +4,6 @@ file '/tmp/test/stuff' do
 end
 fpm 'stuff' do
   sources '/tmp/test/'
+  output_dir '/tmp/'
 end
+package "/tmp/stuff.rpm"
