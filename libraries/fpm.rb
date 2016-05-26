@@ -51,7 +51,7 @@ module Fpm
         cwd Chef::Config[:file_cache_path]
         code <<-EOH
         #{self.bin} -s #{input_type} -t #{output_type} -n #{name} #{sources}
-        mv #{::File.join(output_name, resource.output_dir, name, ".#{output_type}")}
+        mv #{::File.join(output_name, new_resource.output_dir, name, ".#{output_type}")}
         EOH
         not_if do ::File.exists?(::File.join(new_resource.output_dir, name, ".#{output_type}")) end
       end
