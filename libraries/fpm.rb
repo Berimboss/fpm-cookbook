@@ -20,7 +20,7 @@ module Fpm
     include Poise
     provides :fpm
     def output_format(name, ext='rpm', arch='x86_64', version='1.0')
-      "#{name}-#{version}-1.#{arch}.#{ext}"
+      ::File.join(name, version, '-1.', arch, ext)
     end
     def output_name(name)
       self.output_format(name)
@@ -53,7 +53,7 @@ module Fpm
         #{self.bin} -s #{input_type} -t #{output_type} -n #{name} #{sources}
         mv #{output_name} #{new_resource.output_dir}/#{name}.#{output_type}
         EOH
-        not_if do ::File.exists?("#{new_resource.output_dir}/#{name}.#{output_type}") end
+        not_if do ::File.exists?(::File.join(new_resource.output_dir, name, '.', output_type)) end
       end
     end
     def given_the_givens
