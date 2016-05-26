@@ -19,11 +19,8 @@ module Fpm
   class Provider < Chef::Provider
     include Poise
     provides :fpm
-    def output_format(name, ext='rpm', arch='x86_64', version='1.0')
+    def output_name(name, ext='rpm', arch='x86_64', version='1.0')
       ::File.join(name, version, "-1.#{arch}, #{ext}")
-    end
-    def output_name(name)
-      self.output_format(name)
     end
     def virtual_ruby(version, gems=[])
       include_recipe 'rbenv'
@@ -43,15 +40,15 @@ module Fpm
     def bin
       "/opt/rbenv/versions/#{new_resource.ruby_version}/bin/fpm"
     end
-    def pkg(input_type, output_type, output_name, name, sources)
+    def pkg(input_type, output_type, output_name, version, name, sources)
       directory new_resource.output_dir do
         recursive true
       end
       bash "package #{name}" do
         cwd Chef::Config[:file_cache_path]
         code <<-EOH
-        #{self.bin} -s #{input_type} -t #{output_type} -n #{name} #{sources}
-        mv #{::File.join(output_name, new_resource.output_dir, name, ".#{output_type}")}
+        #{self.bin} -s #{input_type} -v #{version} -t #{output_type} -n #{name} #{sources}
+        mv #{output_name} #{::File.join(new_resource.output_dir, "#{name}.#{output_type}")}
         EOH
         not_if do ::File.exists?(::File.join(new_resource.output_dir, name, ".#{output_type}")) end
       end
@@ -65,7 +62,7 @@ module Fpm
     end
     def action_package
       given_the_givens do
-        self.pkg(new_resource.input_type, new_resource.output_type, self.output_name(new_resource.name), new_resource.name, new_resource.sources)
+        self.pkg(new_resource.input_type, new_resource.output_type, self.output_name(new_resource.name, version=new_resource.package_version), new_resource.package_version, new_resource.name, new_resource.sources)
       end
     end
   end
