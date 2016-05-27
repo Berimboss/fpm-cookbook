@@ -1,0 +1,4 @@
+#!<%=@context[:interpreter]%>
+<%@context[:bin_options].each do |opt|%>
+system('<%=@context[:bin]%> <%=opt[:symbol]%>=<%opt[:value]%>')
+<%end%>

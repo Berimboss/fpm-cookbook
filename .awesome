@@ -1,0 +1,8 @@
+ruby_block "create user" do
+  block do
+      user = Chef::Resource::User.new(node[:var], run_context)
+          user.shell '/bin/bash' # Set parameters using this syntax
+              user.run_action :create
+                  user.run_action :manage # Run multiple actions (if needed) by declaring them sequentially
+                    end
+                    end
