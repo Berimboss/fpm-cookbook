@@ -1,4 +1,10 @@
 #!<%=@context[:interpreter]%>
-<%@context[:bin_options].each do |opt|%>
-system('<%=@context[:bin]%> <%=opt[:symbol]%>=<%opt[:value]%>')
+<%optstr=''%>
+<%combooptstr=''%>
+<%@context[:bin_options_combos].each do |opt|%>
+<%combooptstr << " #{opt[:symbol]} #{opt[:value]}"%>
 <%end%>
+<%@context[:bin_options].each do |opt|%>
+<%optstr << " #{opt[:value]}"%>
+<%end%>
+system('<%=@context[:bin]%> <%=optstr%><%=combooptstr%> <%=@context[:sources]%>')

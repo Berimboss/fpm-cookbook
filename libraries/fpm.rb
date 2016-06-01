@@ -96,18 +96,19 @@ module Fpm
     def bin
       "/opt/rbenv/versions/#{new_resource.ruby_version}/bin/fpm"
     end
-    def bin_options
-      opts_base = {
-        :options => [
-          {:help => '--help'}
-        ],
-        :usages => [
-          {:help => '--help'}
+    def bin_options_combos
+        [
+          {:symbol => '-s', :value => new_resource.input_type},
+          {:symbol => '-t', :value => new_resource.output_type},
+          {:symbol => '-n', :value => new_resource.name},
         ]
-      }
-      opts = opts_base[:options]
     end
-    def bin_args(sources)
+    def bin_options
+        [
+          {:value => ''}
+        ]
+    end
+    def get_sources(sources)
       sources = sources.join(' ')
     end
     def interpreter
@@ -122,24 +123,14 @@ module Fpm
         variables :context => {
           :interpreter => self.interpreter,
           :bin => self.bin,
-          :bin_args => self.bin_args(new_resource.sources),
-          :bin_options => self.bin_options
+          :sources => self.get_sources(new_resource.sources),
+          :bin_options => self.bin_options,
+          :bin_options_combos => self.bin_options_combos,
         }
       end
-    end
-    def pkg(input_type, output_type, output_name, version, name, sources)
-      directory new_resource.output_dir do
-        recursive true
+      bash "do_fpm" do
+        code "#{::File.join(new_resource.output_dir, 'do_fpm')}"
       end
-      #bash "package #{name}" do
-      #  cwd Chef::Config[:file_cache_path]
-      #  code <<-EOH
-      #  #{self.bin} -s #{input_type} -v #{version} -t #{output_type} -n #{name} #{sources}
-      #  echo "#{output_type}" > /tmp/testingchef
-      #  mv #{output_name} #{::File.join(new_resource.output_dir, "#{name}.#{output_type}")}
-      #  EOH
-      #  not_if do ::File.exists?(::File.join(new_resource.output_dir, "#{name}.#{output_type}")) end
-      #end
     end
     def given_the_givens
       virtual_ruby new_resource.ruby_version, ['fpm']
