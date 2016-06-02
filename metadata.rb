@@ -4,7 +4,7 @@ maintainer_email 'LouTheBrew@gmail.com'
 license 'MIT'
 description 'Installs/Configures fpm'
 long_description 'Installs/Configures fpm'
-version '0.1.7'
+version '0.1.8'
 
 depends 'rbenv'
 depends 'poise'
