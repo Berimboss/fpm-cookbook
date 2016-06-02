@@ -20,6 +20,7 @@ module Fpm
     attribute :package_version, kind_of: String, default: '1.0'
     attribute :template_stub, default: 'fpm.erb'
     attribute :arch, default: 'x86_64'
+    attribute :local_cookbook, default: 'poise-fpm'
   end
   class Provider < Chef::Provider
     include Poise
@@ -122,6 +123,7 @@ module Fpm
         group new_resource.group
         source new_resource.template_stub
         mode new_resource.mode
+        cookbook new_resource.local_cookbook
         variables :context => {
           :interpreter => self.interpreter,
           :bin => self.bin,
