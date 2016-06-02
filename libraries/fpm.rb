@@ -75,8 +75,9 @@ module Fpm
         ]
       }
     end
-    def output_name(name, ext='rpm', arch='x86_64', version='1.0')
-      "#{name}-#{version}.#{arch}.#{ext}"
+    def output_name(name, arch='x86_64', version='1.0')
+      #"#{name}-#{version}-1.#{arch}.#{ext}"
+      "#{name}-#{version}-1.#{arch}.#{new_resource.output_type}"
     end
     def virtual_ruby(version, gems=[])
       include_recipe 'rbenv'
@@ -130,6 +131,8 @@ module Fpm
       end
       bash "do_fpm" do
         code "#{::File.join(new_resource.output_dir, 'do_fpm')}"
+        cwd Chef::Config[:file_cache_path]
+        not_if do ::File.exists?("#{::File.join(Chef::Config[:file_cache_path])}/#{"#{new_resource.name}-#{new_resource.package_version}-1.x86_64.#{new_resource.output_type}"}") end
       end
     end
     def given_the_givens

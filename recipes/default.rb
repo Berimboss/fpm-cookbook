@@ -1,12 +1,11 @@
 directory '/tmp/test'
-directory '/tmp/test/amazing'
+directory '/tmp/testing'
 file '/tmp/test/stuff' do
   content 'there is stuff here'
 end
-file '/tmp/test/amazing/stuff' do
-  content 'the amazing stuff is here'
+file '/tmp/testing/stuff' do
+  content 'the itesting stuff is here'
 end
 fpm 'stuff' do
-  sources ['/tmp/test/']
+  sources ['/tmp/test/', '/tmp/testing/']
 end
-#package "/tmp/stuff.rpm"
