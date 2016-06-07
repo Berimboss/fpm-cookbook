@@ -77,9 +77,11 @@ module Fpm
         ]
       }
     end
-    def output_name(name, arch='x86_64', version='1.0')
-      #"#{name}-#{version}-1.#{arch}.#{ext}"
-      "#{name}-#{version}-1.#{arch}.#{new_resource.output_type}"
+    def output_name
+      "#{new_resource.name}-#{new_resource.package_version}-1.#{new_resource.arch}.#{new_resource.output_type}"
+    end
+    def final_output_name
+      "#{new_resource.name}-#{new_resource.package_version}-#{new_resource.arch}.#{new_resource.output_type}"
     end
     def virtual_ruby(version, gems=[])
       include_recipe 'rbenv'
@@ -130,14 +132,14 @@ module Fpm
           :sources => self.get_sources(new_resource.sources),
           :bin_options => self.bin_options,
           :bin_options_combos => self.bin_options_combos,
-          :pkg_name => "#{::File.join(Chef::Config[:file_cache_path])}/#{new_resource.name}-#{new_resource.package_version}-1.#{new_resource.arch}.#{new_resource.output_type}",
-          :simple_pkg_name => "#{::File.join(Chef::Config[:file_cache_path])}/#{new_resource.name}-#{new_resource.package_version}-#{new_resource.arch}.#{new_resource.output_type}"
+          :pkg_name => "#{::File.join(Chef::Config[:file_cache_path], self.final_output_name)}",
+          :simple_pkg_name => "#{::File.join(Chef::Config[:file_cache_path], self.final_output_name)}"
         }
       end
       bash "do_fpm" do
         code "#{::File.join(new_resource.output_dir, 'do_fpm')}"
         cwd Chef::Config[:file_cache_path]
-        #not_if do ::File.exists?("#{::File.join(Chef::Config[:file_cache_path])}/#{"#{new_resource.name}-#{new_resource.package_version}-1.#{new_resource.arch}.#{new_resource.output_type}"}") end
+        not_if do ::File.exists?("#{::File.join(Chef::Config[:file_cache_path], self.final_output_name)}") end
       end
     end
     def given_the_givens
