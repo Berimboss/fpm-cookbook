@@ -2,11 +2,14 @@ namespace :repository do
   cookbook_path = ENV['RAKE_COOKBOOK_PATH']
   cookbook_name = ::File.read('NAME').strip
   task :git_update do
-    system <<-EOH
+    commit = <<-EOH
     git add -f *
     git commit -a -m "updated blindly from rake to version #{::File.read('VERSION').strip}"
+    git tag -a #{::File.read('VERSION').strip} -m "version release #{::File.read('VERSION').strip}"
     git push origin #{`git rev-parse --abbrev-ref HEAD`}
+    git push origin #{::File.read('VERSION').strip}
     EOH
+    system "#{commit}"
   end
   task :up_minor_version do
     stripped = ::File.read('VERSION').strip
