@@ -8,6 +8,7 @@ namespace :repository do
     git tag -a #{::File.read('VERSION').strip} -m "version release #{::File.read('VERSION').strip}"
     git push origin #{`git rev-parse --abbrev-ref HEAD`}
     git push origin #{::File.read('VERSION').strip}
+    git commit -a -m "updated blindly from rake to version #{::File.read('VERSION').strip}"
     EOH
     system "#{commit}"
   end
@@ -34,7 +35,7 @@ namespace :repository do
     knife cookbook site share #{cookbook_name} "Other" -o #{cookbook_path}
     EOH
   end
-  task :publish => [:up_minor_version, :git_update, :sync_berkshelf, :supermarket]
+  task :publish => [:up_minor_version, :sync_berkshelf, :supermarket, :git_update]
   task :commit => [:sync_berkshelf, :git_update]
 end
 namespace :kitchen do
@@ -51,4 +52,3 @@ end
 task :default => 'repository:commit'
 task :reconverge => 'kitchen:reconverge'
 task :publish => 'repository:publish'
-task :deps => 'repository:sync_berkshelf'
