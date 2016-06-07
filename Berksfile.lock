@@ -24,7 +24,7 @@ GRAPH
   ohai (4.1.0)
     compat_resource (>= 12.9.0)
   poise (2.7.0)
-  poise-fpm (0.1.17)
+  poise-fpm (0.1.18)
     poise (>= 0.0.0)
     rbenv (>= 0.0.0)
   rbenv (1.7.1)
