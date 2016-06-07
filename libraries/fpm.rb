@@ -119,7 +119,7 @@ module Fpm
     def interpreter
       "/opt/rbenv/versions/#{new_resource.ruby_version}/bin/ruby"
     end
-    def pkg_new
+    def pkg
       template ::File.join(new_resource.output_dir, 'do_fpm') do
         user new_resource.user
         group new_resource.group
@@ -151,7 +151,7 @@ module Fpm
     end
     def action_package
       given_the_givens do
-        self.pkg_new
+        self.pkg
       end
     end
   end
