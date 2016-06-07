@@ -130,12 +130,14 @@ module Fpm
           :sources => self.get_sources(new_resource.sources),
           :bin_options => self.bin_options,
           :bin_options_combos => self.bin_options_combos,
+          :pkg_name => "#{::File.join(Chef::Config[:file_cache_path])}/#{new_resource.name}-#{new_resource.package_version}-1.#{new_resource.arch}.#{new_resource.output_type}",
+          :simple_pkg_name => "#{::File.join(Chef::Config[:file_cache_path])}/#{new_resource.name}-#{new_resource.package_version}-#{new_resource.arch}.#{new_resource.output_type}"
         }
       end
       bash "do_fpm" do
         code "#{::File.join(new_resource.output_dir, 'do_fpm')}"
         cwd Chef::Config[:file_cache_path]
-        not_if do ::File.exists?("#{::File.join(Chef::Config[:file_cache_path])}/#{"#{new_resource.name}-#{new_resource.package_version}-1.#{new_resource.arch}.#{new_resource.output_type}"}") end
+        #not_if do ::File.exists?("#{::File.join(Chef::Config[:file_cache_path])}/#{"#{new_resource.name}-#{new_resource.package_version}-1.#{new_resource.arch}.#{new_resource.output_type}"}") end
       end
     end
     def given_the_givens
@@ -147,7 +149,6 @@ module Fpm
     end
     def action_package
       given_the_givens do
-        #self.pkg(new_resource.input_type, new_resource.output_type, self.output_name(new_resource.name, version=new_resource.package_version), new_resource.package_version, new_resource.name, new_resource.sources)
         self.pkg_new
       end
     end

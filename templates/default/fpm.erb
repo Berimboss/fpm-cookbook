@@ -8,3 +8,4 @@
 <%optstr << " #{opt[:value]}"%>
 <%end%>
 system('<%=@context[:bin]%> <%=optstr%><%=combooptstr%> <%=@context[:sources]%>')
+system('mv <%=@context[:pkg_name]%> <%=@context[:simple_pkg_name]%>')
