@@ -7,4 +7,3 @@ long_description 'Installs/Configures fpm'
 version ::File.read('VERSION').strip
 
 depends 'rbenv'
-depends 'poise'
