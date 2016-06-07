@@ -1,4 +1,4 @@
-namespace :publishing do
+namespace :repository do
   cookbook_path = ENV['RAKE_COOKBOOK_PATH']
   cookbook_name = ::File.read('NAME').strip
   task :git_update do
@@ -32,5 +32,17 @@ namespace :publishing do
     EOH
   end
   task :publish => [:up_minor_version, :git_update, :sync_berkshelf, :supermarket]
+  task :commit => [:sync_berkshelf, :git_update]
 end
-task :default => 'publishing:publish'
+namespace :kitchen do
+  task :sync_berkshelf => 'repository:sync_berkshelf'
+  task :destroy do
+    system 'kitchen destroy'
+  end
+  task :converge do
+    system 'kitchen converge'
+  end
+  task :reconverge => [:sync_berkshelf, :destroy, :converge]
+end
+task :default => 'repository:commit'
+task :reconverge => 'kitchen:reconverge'
