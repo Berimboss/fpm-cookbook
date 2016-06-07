@@ -132,7 +132,7 @@ module Fpm
           :sources => self.get_sources(new_resource.sources),
           :bin_options => self.bin_options,
           :bin_options_combos => self.bin_options_combos,
-          :pkg_name => "#{::File.join(Chef::Config[:file_cache_path], self.final_output_name)}",
+          :pkg_name => "#{::File.join(Chef::Config[:file_cache_path], self.output_name)}",
           :simple_pkg_name => "#{::File.join(Chef::Config[:file_cache_path], self.final_output_name)}"
         }
       end
