@@ -47,6 +47,7 @@ namespace :kitchen do
   end
   task :reconverge => [:sync_berkshelf, :destroy, :converge]
 end
+############################################## main tasks
 task :default => 'repository:commit'
 task :reconverge => 'kitchen:reconverge'
 task :publish => 'repository:publish'
