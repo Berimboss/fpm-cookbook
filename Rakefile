@@ -51,3 +51,4 @@ end
 task :default => 'repository:commit'
 task :reconverge => 'kitchen:reconverge'
 task :publish => 'repository:publish'
+task :deps => 'repository:sync_berkshelf'
