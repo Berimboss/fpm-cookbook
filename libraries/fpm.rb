@@ -13,8 +13,8 @@ module Fpm
     attribute :mode, default: 0777
     attribute :install_deps, default: true, kind_of: [TrueClass, FalseClass]
     attribute :sources, required: true, kind_of: Array
-    attribute :ruby_version, kind_of: String, default: '2.1.2', regex: ['2.1.2']
-    attribute :input_type, kind_of: String, default: 'dir', regex: 'dir'
+    attribute :ruby_version, kind_of: String, default: '2.3.1'
+    attribute :input_type, kind_of: String, default: 'dir'
     attribute :output_type, kind_of: String, default: 'rpm', regex: ['rpm', 'deb']
     attribute :output_dir, kind_of: String, default: "#{Chef::Config[:file_cache_path]}", required: true
     attribute :package_version, kind_of: String, default: '1.0'

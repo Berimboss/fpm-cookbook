@@ -1,3 +1,4 @@
+package 'bzip2'
 directory '/tmp/test'
 directory '/tmp/testing'
 file '/tmp/test/stuff' do
