@@ -1,1 +1,1 @@
-/Users/ldesiqueira/code/github.com/ldesiqueira/jobvite/code_generator/files/default/Rakefile
+/Users/ldesiqueira/code/bitbucket/ldesiqueira/jobvite_code_generator/files/default/Rakefile
